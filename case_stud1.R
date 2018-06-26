@@ -1,8 +1,13 @@
 
 library('dplyr')
-library(ggplot2)
+library('ggplot2')
+library('rstudioapi')
 
-setwd("F:\\My_Docs\\univer\\DataScience\\Case_Studies\\Case Study 1\\casestudy1")
+current_path = rstudioapi::getActiveDocumentContext()$path 
+setwd(dirname(current_path ))
+print( getwd() )
+
+#setwd("F:\\My_Docs\\univer\\DataScience\\Case_Studies\\Case Study 1\\casestudy1")
 
 df_beer = read.csv("Beers.csv",header = TRUE)
 df_brew = read.csv("Breweries.csv",header = TRUE)
@@ -65,7 +70,7 @@ summary(final_brew$ABV)
 
 #Answerr Q7
 ggplot(data = final_brew, mapping =aes(x=final_brew$ABV, y=final_brew$IBU )) +
-  geom_point(shape = 16, size = 3, show.legend = FALSE,colour="#CC0000") +
+  geom_point(shape = 16, size = 2, show.legend = FALSE,colour="#CC0000") +
   theme(
     plot.title = element_text(color="red", size=14, face="bold.italic"),
     axis.title.x = element_text(color="blue", size=14, face="bold"),
