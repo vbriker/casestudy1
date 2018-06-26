@@ -2,7 +2,7 @@
 library('dplyr')
 library(ggplot2)
 
-setwd("F:\\My_Docs\\univer\\DataScience\\Case_Studies\\Case Study 1")
+setwd("F:\\My_Docs\\univer\\DataScience\\Case_Studies\\Case Study 1\\casestudy1")
 
 df_beer = read.csv("Beers.csv",header = TRUE)
 df_brew = read.csv("Breweries.csv",header = TRUE)
@@ -48,7 +48,8 @@ barplot(BrewByState_IBU$Median,names.arg=BrewByState_IBU$State,
 
 BrewByState_ABV=summarize(BrewByState_all,Max = max(ABV, na.rm = T)  )
 BrewByState_IBU=summarize(BrewByState_all,Max = max(IBU, na.rm = T)  )
-
+BrewByState_ABV
+BrewByState_IBU
 #BrewByState_ABV=na.omit(BrewByState_ABV)
 #BrewByState_IBU=na.omit(BrewByState_IBU)
 
@@ -62,14 +63,13 @@ BrewByState_IBU$State[which(BrewByState_IBU$Max == max(BrewByState_IBU$Max))[1]]
 #Answer Q6
 summary(final_brew$ABV)
 
-#Answr Q7
-ggplot(data = final_brew, mapping =aes(x=final_brew$ABV, y=final_brew$IBU, color = a)) +
-  geom_point(shape = 16, size = 3, show.legend = FALSE) +
+#Answerr Q7
+ggplot(data = final_brew, mapping =aes(x=final_brew$ABV, y=final_brew$IBU )) +
+  geom_point(shape = 16, size = 3, show.legend = FALSE,colour="#CC0000") +
   theme(
     plot.title = element_text(color="red", size=14, face="bold.italic"),
     axis.title.x = element_text(color="blue", size=14, face="bold"),
-    axis.title.y = element_text(color="blue", size=14, face="bold")
-  )+
+    axis.title.y = element_text(color="blue", size=14, face="bold"))+
   geom_smooth(method = lm)+
   ggtitle("Plot of ABV vs IBU") +
     xlab("ABV") + ylab("IBU")
