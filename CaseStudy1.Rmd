@@ -109,16 +109,15 @@ summary(final_brew$ABV)
 Marci computed the R squared to find the correlation between ABV and IBU and plotted the data in a scatterplot. The closer R squared is to 1, the better the explanatory variables explain the variability in the response. Marci calculated an R squared of 0.4497 and a correlation between ABV and IBU of 0.6706, or 67%. 
 ```{r}
 library(ggplot2)
-ggplot2(data = final_brew, mapping =aes(x=final_brew$ABV, y=final_brew$IBU, color = a)) +
-  geom_point(shape = 16, size = 3, show.legend = FALSE) +
+ggplot(data = final_brew, mapping =aes(x=final_brew$ABV, y=final_brew$IBU )) +
+  geom_point(shape = 16, size = 3, show.legend = FALSE,colour="#CC0000") +
   theme(
     plot.title = element_text(color="red", size=14, face="bold.italic"),
     axis.title.x = element_text(color="blue", size=14, face="bold"),
-    axis.title.y = element_text(color="blue", size=14, face="bold")
-  )+
+    axis.title.y = element_text(color="blue", size=14, face="bold"))+
   geom_smooth(method = lm)+
   ggtitle("Plot of ABV vs IBU") +
-  xlab("ABV") + ylab("IBU")
+    xlab("ABV") + ylab("IBU")
 
 
 corr=cor.test(final_brew$ABV,final_brew$IBU)
