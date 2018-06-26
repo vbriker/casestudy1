@@ -54,25 +54,9 @@ barplot(BrewByState_IBU$Median,names.arg=BrewByState_IBU$State,
         horiz=FALSE,col='darkblue',space=1)
 
 #Answer Q5
-#BrewByState_ABV_m=na.omit(BrewByState_ABV)
-#BrewByState_IBU_m=na.omit(BrewByState_IBU)
-
-#BrewByState_ABV_max=summarize(BrewByState_all,Max = max(ABV, na.rm = T)  )
-#BrewByState_IBU_max=summarize(BrewByState_all,Max = max(IBU, na.rm = T)  )
-
-#colnames(BrewByState_ABV)[grep(".*State.*$", colnames(BrewByState_ABV))]='State'
-#colnames(BrewByState_IBU)[grep(".*State.*$", colnames(BrewByState_IBU))]='State'
-
-
-#BrewByState_ABV=na.omit(BrewByState_ABV)
-#BrewByState_IBU=na.omit(BrewByState_IBU)
-
 
 BrewByState_ABV$State[which(BrewByState_ABV$Max == max(BrewByState_ABV$Max))]
 BrewByState_IBU$State[which(BrewByState_IBU$Max == max(BrewByState_IBU$Max))]
-
-#BrewByState_ABV
-#BrewByState_IBU
 
 #Answer Q6
 summary(final_brew$ABV)
