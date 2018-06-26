@@ -6,7 +6,8 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
+knitr:::input_dir()
 ```
 
 ## Overview
@@ -14,11 +15,12 @@ knitr::opts_chunk$set(echo = TRUE)
 Mike, a passionate in-home beer brewer, has achieved quite the neghborhood success with his home brews. He brews all types of beer in his backyard, from Lagers to Stouts, to Pale ales and Pilsners. He has had so much interset in his home brew that he has decided to create his own brewing companny and name it "Not Your Avg. Backyard Brew." Mike only creates craft brews for his local community, and he wants to get a feel for the larger beer consumption in the United States. Mike has decided to ask his good friend, Marci, who happens to be a data scientist for her help. Mike tediosly collected data into two datasets: Beers and Breweries. The  Beers  dataset  contains  a  list  of  2410  US  craft  beers  and  Breweries  dataset  contains  558  US  breweries. 
 
 ## Marci needs to upload the datasets to analyze them. 
-She needs two handy packages, dplyr and ggplot2, and she sets her working directory. She also adds column names to make the data easier to read and work with.
+She needs two handy packages, dplyr and ggplot2, and she also matches "BeerID" column names to make data easier to merge.
+
 ```{r}
-library('dplyr')
-library(ggplot2)
-##setwd("F:\\My_Docs\\univer\\DataScience\\Case_Studies\\Case Study 1")
+library('dplyr',quietly = TRUE)
+library('ggplot2',quietly = TRUE)
+
 df_beer = read.csv("Beers.csv",header = TRUE)
 df_brew = read.csv("Breweries.csv",header = TRUE)
 colnames(df_beer)[grep("^Brew.*$", colnames(df_beer))]='BrewID'
@@ -60,14 +62,15 @@ Marci begins by calculating the median alcohol content (ABV) and the internation
 
 ```{r}
 BrewByState_all = group_by(final_brew,final_brew$State,na.rm=TRUE) 
-BrewByState_ABV=summarize(BrewByState_all,Median = median(ABV, na.rm = T)  )
-BrewByState_IBU=summarize(BrewByState_all,Median = median(IBU, na.rm = T)  )
 
-BrewByState_ABV
-BrewByState_IBU
+BrewByState_ABV=as_data_frame(summarize(BrewByState_all,Median = median(ABV, na.rm = T) ,Max = max(ABV, na.rm = T)))
+BrewByState_IBU=as_data_frame(summarize(BrewByState_all,Median = median(IBU, na.rm = T) ,Max = max(IBU, na.rm = T)))
 
 colnames(BrewByState_ABV)[grep(".*State.*$", colnames(BrewByState_ABV))]='State'
 colnames(BrewByState_IBU)[grep(".*State.*$", colnames(BrewByState_IBU))]='State'
+
+select(BrewByState_ABV,State,Median)
+select(BrewByState_IBU,State,Median)
 
 par(las=2)
 barplot(BrewByState_ABV$Median,names.arg=BrewByState_ABV$State,
@@ -78,25 +81,18 @@ par(las=2)
 barplot(BrewByState_IBU$Median,names.arg=BrewByState_IBU$State,
         main = "Beer Median IBU by state",
         horiz=FALSE,col='darkblue',space=1)
-
-
-BrewByState_ABV=summarize(BrewByState_all,Max = max(ABV, na.rm = T)  )
-BrewByState_IBU=summarize(BrewByState_all,Max = max(IBU, na.rm = T)  )
-
-#BrewByState_ABV=na.omit(BrewByState_ABV)
-#BrewByState_IBU=na.omit(BrewByState_IBU)
-
-colnames(BrewByState_ABV)[grep(".*State.*$", colnames(BrewByState_ABV))]='State'
-colnames(BrewByState_IBU)[grep(".*State.*$", colnames(BrewByState_IBU))]='State'
-
 ```
+
+
 ## Mike wants to know Which state has the maximum alcoholic (ABV) beer and which state has the most bitter (IBU) beer.
 Marci extracts the max ABV and IBU values from the BrewByState dataset. Marci informs Mike that Colorado (CO) at 0.128 has beer with the highest ABV and Oregon (OR) at 138  has beer with the highest IBU.
 
 ```{r}
-BrewByState_ABV$State[which(BrewByState_ABV$Max == max(BrewByState_ABV$Max))[1]]
-BrewByState_IBU$State[which(BrewByState_IBU$Max == max(BrewByState_IBU$Max))[1]]
+BrewByState_ABV$State[which(BrewByState_ABV$Max == max(BrewByState_ABV$Max))]
+BrewByState_IBU$State[which(BrewByState_IBU$Max == max(BrewByState_IBU$Max))]
 ```
+
+
 ## Mike asks Marci to print some basic summary statistics for the ABV variable.
 
 Marci can calculate summary statistics in her sleep by using the summary function.
@@ -107,6 +103,7 @@ summary(final_brew$ABV)
 ## Finally, Mike wants to know if there an apparent relationship between the bitterness of the beer and its alcoholic content. He wants this information delivered via a scatterplot.
 
 Marci computed the R squared to find the correlation between ABV and IBU and plotted the data in a scatterplot. The closer R squared is to 1, the better the explanatory variables explain the variability in the response. Marci calculated an R squared of 0.4497 and a correlation between ABV and IBU of 0.6706, or 67%. 
+
 ```{r}
 library(ggplot2)
 ggplot(data = final_brew, mapping =aes(x=final_brew$ABV, y=final_brew$IBU )) +
@@ -125,6 +122,7 @@ corr
 Rsquared=corr$estimate^2
 Rsquared
 ```
+
 ## In conclusion, Mike was very satisfied with Marci's adept data science skills. He is now able to understand what beer he should brew to fit the tastes of Americans in each state. Mike found it interesting that ABV and IBU were not highly correlated with a correlation value of 0.6706 and an R squared of only 0.4497. This is not surprising, as there are probably multiple variables needed to best fit a line of least squares regression. However, one variable explaining 0.4497, or 45%, of the variation in the response variable is not a bad start. From these results, Mike decided that brewing "Not Your Avg. Backyard Brew" was too difficult. Mike has sense started his own wine company called "Wine a Lot."
 
 ##The End.
