@@ -5,5 +5,5 @@
 ## A client, Mike, is created to frame the analysis and questions around to make the project more interesting.
 
 # Codebook
-## The code in this project is contained in the CaseStudy1 Rmd file.
+## The code in this project is contained in the CaseStudy1 Rmd file and the case_study_1 R code.
 ## The two datasets used, Beers.csv and Breweries.csv, are also uploaded in this repository.
